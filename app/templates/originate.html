@@ -10,8 +10,8 @@
 {% block page_content %}
 <h1>创建新问卷</h1>
 
-<form method="post">
-	<input placeholder="请输入问卷标题…" name="title" type="text"><br><br><br>
+<form method="post" id="form">
+	<input placeholder="请输入问卷标题…" name="title" type="text" class="required"><br><br><br>
 	<textarea placeholder="介绍（选填）" name="comment"></textarea>
 	<hr>
 
@@ -42,18 +42,18 @@
 			case 1: q_div.setAttribute('class', 'radio-field');
 					q_div.innerHTML = `
 						<h4>「单选」</h4>
-						<p>问题：<input type='text' name='label'></p>
+						<p>问题：<input type='text' name='label' class='required'></p>
 						<p>描述（选填）：<input type='text' name='desc'></p>
 
 						<h6 class='option-text'>--选项--</h6>
 						<a href='#' class='option-add'>add</a>
 						<ul>
 							<li>
-								<input class='option-item' type='text' name='option-item'>
+								<input class='option-item required' type='text' name='option-item'>
 								<a href='#' class='option-del'>del</a>
 							</li>
 							<li>
-								<input class='option-item' type='text' name='option-item'>
+								<input class='option-item required' type='text' name='option-item'>
 								<a href='#' class='option-del'>del</a>
 							</li>
 						</ul>
@@ -66,18 +66,18 @@
 			case 2: q_div.setAttribute('class', 'checkbox-field');
 					q_div.innerHTML = `
 						<h4>「多选」</h4>
-						<p>问题：<input type='text' name='label'></p>
+						<p>问题：<input type='text' name='label' class='required'></p>
 						<p>描述（选填）：<input type='text' name='desc'></p>
 
 						<h6 class='option-text'>--选项--</h6>
 						<a href='#' class='option-add'>add</a>
 						<ul>
 							<li>
-								<input class='option-item' type='text' name='option-item'>
+								<input class='option-item required' type='text' name='option-item'>
 								<a href='#' class='option-del'>del</a>
 							</li>
 							<li>
-								<input class='option-item' type='text' name='option-item'>
+								<input class='option-item required' type='text' name='option-item'>
 								<a href='#' class='option-del'>del</a>
 							</li>
 						</ul>
@@ -90,7 +90,7 @@
 			case 3: q_div.setAttribute('class', 'text-field');
 					q_div.innerHTML = `
 						<h4>「文本」</h4>
-						<p>问题：<input type="text" name="label"></p>
+						<p>问题：<input type="text" name="label" class='required'></p>
 						<p>描述（选填）：<input type="text" name="desc"></p>
 						<input type="checkbox" name="is-mandatory">是否必选<br>
 						<button>删除</button>`;
@@ -98,5 +98,21 @@
 		}
 		question_area.appendChild(q_div);
 	}
+
+	// 检查必填项都不为空
+	$('#form').submit(function () {
+		var mandatories = document.getElementsByClassName('required');
+		console.log(mandatories)
+		for (var i = 0; i < mandatories.length; i++) {
+			console.log(mandatories[i].value)
+			if (mandatories[i].value ===  '') {
+				alert('Check inputs.');
+				return false;
+			}
+		}
+		return true;
+	});
+
+
 </script>
 {% endblock %}
