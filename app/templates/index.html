@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}LetsVote-广场{% endblock title %}
+
+{% block page_content %}
+<h1>List of Questionnaires</h1>
+<ul class="questionnaire-list">
+{% for slug, data in questionnaires %}
+	<li>
+		<a href="{{ url_for('ques.results', slug=slug) }}">{{ data.title }}</a>
+		<ul class="form">
+			<li><a href="{{ url_for('ques.questionnaire', slug=slug) }}">Form</a></li>
+		</ul>
+	</li>
+{% else %}
+<li>There is no questionnaire yet.</li>
+{% endfor %}
+</ul>
+{% endblock page_content %}

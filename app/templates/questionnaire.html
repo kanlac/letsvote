@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ questionnaire.title }}
+{% endblock title %}
+
+{% block page_content %}
+  <h1>{{ questionnaire.title }}</h1>
+  <p>{{ questionnaire.comment }}</p>
+  {% include "form-new.html" %}
+{% endblock page_content %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}LetsVote-统计结果-{{questionnaire.title}}{% endblock %}
+
+{% block page_content %}
+
+{% if results is none %}
+<h4>还没有人填写过该问卷喔😯</h4>
+{% else %}
+	<p>答卷份数：{{ results.total }}</p>
+	{% for q in results.questions %}
+		<h3>{{ q.label }}</h3><br>
+		{% if q.result %}
+			{% for opt in q.result %}
+			<p>
+				<b>{{ opt.option }}：</b>
+				{{ opt.count }} 人
+				{% if opt.percentage %}
+				| {{ opt.percentage }}%
+				{% endif %}
+			</p>
+			{% endfor %}
+			{% if q.other_options %}
+			<p>
+				{% for t in q.other_options %}
+				{% if loop.index0 %}, {% endif %}
+				{{ t }}
+				{% endfor %}
+			</p>
+			{% endif %}
+		{% else %}
+			{% for text in q.texts %}
+			<p>{{ text }}</p>
+			{% endfor %}
+		{% endif %}
+		<hr>
+	{% endfor %}
+{% endif %}
+
+{% endblock %}

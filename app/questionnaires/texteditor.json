@@ -1,0 +1,34 @@
+{
+    "title": "Text Editor Survey",
+    "creator": "Jane",
+    "questions": [
+        {
+            "type": "checkbox",
+            "label": "What text editors do you use?",
+            "help": "For programming and other purposes.",
+            "required": true,
+            "options": [
+                "Ed",
+                "Vi",
+                "Emacs",
+                "+Other"
+            ]
+        },
+        {
+            "type": "radio",
+            "label": "What text editor do you prefer?",
+            "required": true,
+            "options": [
+                "Ed",
+                "Vi",
+                "Emacs",
+                "+Other"
+            ]
+        },
+        {
+            "type": "text",
+            "label": "Why not cat(1)?",
+            "help": "Please, explain in one paragraph."
+        }
+    ]
+}

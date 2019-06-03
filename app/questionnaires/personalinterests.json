@@ -1,0 +1,52 @@
+{
+	"title": "Personal Interests",
+	"comment": "个人兴趣问卷调查。",
+	"creator": "Jacob",
+	"questions": [
+		{
+			"type": "radio",
+			"label": "你的年龄",
+			"required": true,
+			"options": [
+				"12 周岁以下",
+				"13-19 岁",
+				"20-28 岁",
+				"29 岁及以上"
+			]
+		},
+		{
+			"type": "radio",
+			"label": "最喜欢的颜色",
+			"required": true,
+			"options": [
+				"红色",
+				"蓝色",
+				"黑色",
+				"绿色",
+				"黄色",
+				"紫色",
+				"Other"
+			]
+		},
+		{
+			"type": "checkbox",
+			"label": "兴趣",
+			"required": true,
+			"help": "可以选择多个答案",
+			"options": [
+				"跑步",
+				"编程",
+				"读书",
+				"游泳",
+				"音乐",
+				"下棋",
+				"游戏"
+			]
+		},
+		{
+			"type": "text",
+			"label": "给我们的建议",
+			"help": "帮助我们改进这份问卷。"
+		}
+	]
+}

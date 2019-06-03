@@ -1,0 +1,47 @@
+<form action="{{ url_for('ques.questionnaire', slug=slug) }}" method="POST">
+{% for q in questionnaire.questions %}
+
+	{% set qloop = loop %}
+	{% set qid = "q{0}".format(loop.index0) %} {# 如在第一次循环中，qid=q0，第二次循环 qid=q1 #}
+
+	<div class="question">
+
+		<label for="{{ qid }}"> {# 虽然写了 for 属性，但是并没有绑定任何表单元素吧 #}
+			<span class="question-title">{{ q.label }}</span>
+			{% if q.required %}
+			<sup>*</sup>
+			{% endif %}
+
+			{% if q.error %} {# 起作用了吗？ #}
+			<span class="error">
+				{{ questionnaire.messages.error.required }}
+			</span>
+			{% endif %}
+
+	 	</label>
+
+		{% if q.help %}
+		<p>{{ q.help }}</p>
+		{% endif %}
+
+		{% if q.type == "text" %}
+		<textarea id="{{ qid }}" name="{{ qid }}">{{ q.value }}</textarea> {# q.value 是啥？是报错的部分吗？ #}
+		{% elif q.type in ("radio", "checkbox") %}
+		<ul class="options">
+			{% for opt in q.options %}
+			<li>
+				{% set checked = "checked" if opt == q.value or opt in q.get('values', []) else "" %}
+				<label>
+					<input name="{{ qid }}" type="{{ q.type }}" value="{{ opt }}" {{ checked }}>
+					<span>{{ opt }}</span>
+				</label>
+			</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+
+	</div>
+{% endfor %}
+
+	<input type="submit" name="submit" value="{{ questionnaire.submit }}"> {# value 设的是 ques.__init__ 配置的参数 #}
+</form>

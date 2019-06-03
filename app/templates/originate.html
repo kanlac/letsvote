@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/originate.css') }}">
+{% endblock %}
+
+{% block title %}LetsVote-创建问卷{% endblock %}
+
+{% block page_content %}
+<h1>创建新问卷</h1>
+
+<form method="post">
+	<input placeholder="请输入问卷标题…" name="title" type="text"><br><br><br>
+	<textarea placeholder="介绍（选填）" name="comment"></textarea>
+	<hr>
+
+	<div id="question-area"></div>
+
+	<div class="new-question-field">
+		<h4>新的问题：</h4>
+		<p>
+			<div onclick="new_question(1)">单选</div>
+			<div onclick="new_question(2)">多选</div>
+			<div onclick="new_question(3)">文本</div>
+		</p>
+	</div>
+
+	<input type="submit" name="submit"></input>
+</form>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+	var form = document.getElementsByTagName('form');
+
+	function new_question(type) {
+		var question_area = document.getElementById('question-area');
+		var q_div = document.createElement('div');
+		switch(type) {
+			case 1: q_div.setAttribute('class', 'radio-field');
+					q_div.innerHTML = `
+						<h4>「单选」</h4>
+						<p>问题：<input type='text' name='label'></p>
+						<p>描述（选填）：<input type='text' name='desc'></p>
+
+						<h6 class='option-text'>--选项--</h6>
+						<a href='#' class='option-add'>add</a>
+						<ul>
+							<li>
+								<input class='option-item' type='text' name='option-item'>
+								<a href='#' class='option-del'>del</a>
+							</li>
+							<li>
+								<input class='option-item' type='text' name='option-item'>
+								<a href='#' class='option-del'>del</a>
+							</li>
+						</ul>
+
+						<input type='checkbox' name='allow-other'>是否包含「其他」项<br>
+						<input type='checkbox' name='is-mandatory'>是否必选<br>
+
+						<button>删除</button>`;
+					break;
+			case 2: q_div.setAttribute('class', 'checkbox-field');
+					q_div.innerHTML = `
+						<h4>「多选」</h4>
+						<p>问题：<input type='text' name='label'></p>
+						<p>描述（选填）：<input type='text' name='desc'></p>
+
+						<h6 class='option-text'>--选项--</h6>
+						<a href='#' class='option-add'>add</a>
+						<ul>
+							<li>
+								<input class='option-item' type='text' name='option-item'>
+								<a href='#' class='option-del'>del</a>
+							</li>
+							<li>
+								<input class='option-item' type='text' name='option-item'>
+								<a href='#' class='option-del'>del</a>
+							</li>
+						</ul>
+
+						<input type='checkbox' name='allow-other'>是否包含「其他」项<br>
+						<input type='checkbox' name='is-mandatory'>是否必选<br>
+
+						<button>删除</button>`;
+					break;
+			case 3: q_div.setAttribute('class', 'text-field');
+					q_div.innerHTML = `
+						<h4>「文本」</h4>
+						<p>问题：<input type="text" name="label"></p>
+						<p>描述（选填）：<input type="text" name="desc"></p>
+						<input type="checkbox" name="is-mandatory">是否必选<br>
+						<button>删除</button>`;
+					break;
+		}
+		question_area.appendChild(q_div);
+	}
+</script>
+{% endblock %}

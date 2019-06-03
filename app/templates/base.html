@@ -1,0 +1,65 @@
+{% extends "bootstrap/base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/normalize.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/base.css') }}">
+{% endblock %}
+
+{% block title %}LetsVote{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-inverse " style="border-radius: 0">
+	<div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarTogglerItems" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ url_for('ques.square') }}">LetsVote</a>
+    </div>
+	
+	<div class="collapse navbar-collapse" id="navbarTogglerItems">
+		<div class="container-fluid">
+			<ul class="navbar-nav nav">
+				{% if current_user.is_authenticated %}
+				<li class="nav-item">
+					<p class="navbar-text navbar-left">Hello, {{ current_user.username }}! </p>
+				</li>
+				{% endif %}
+			</ul>
+			<ul class="navbar-nav nav navbar-right">
+				<li class="nav-item">
+					<a class="nav-link" href="#">关于</a>
+				</li>
+				{% if current_user.is_authenticated %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('ques.originate') }}">发起新问卷</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('auth.logout') }}">注销</a>
+				</li>
+				{% else %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ url_for('auth.login') }}">登录<span class="sr-only">(current)</span></a>
+				</li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	{% for message in get_flashed_messages() %}
+	<div class="alert alert-warning">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		{{ message }}
+	</div>
+	{% endfor %}
+
+	{% block page_content %} {% endblock %} <!-- 继承该模版的子模版中的内容要写在这个 block 里，也就是说子模版中写到 block 之外的内容不会在页面中显示出来 -->
+</div>
+{% endblock %}

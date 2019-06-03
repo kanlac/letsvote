@@ -1,0 +1,131 @@
+{
+    "total": 52,
+    "questions": [
+        {
+            "label": "你的年龄",
+            "type": "radio",
+            "result": [
+                {
+                    "option": "12 周岁以下",
+                    "count": 4,
+                    "percentage": "7.69"
+                },
+                {
+                    "option": "13-19 岁",
+                    "count": 14,
+                    "percentage": "26.92"
+                },
+                {
+                    "option": "20-28 岁",
+                    "count": 23,
+                    "percentage": "44.23"
+                },
+                {
+                    "option": "29 岁及以上",
+                    "count": 14,
+                    "percentage": "26.92"
+                }
+            ]
+        },
+        {
+            "label": "最喜欢的颜色",
+            "type": "radio",
+            "result": [
+                {
+                    "option": "红色",
+                    "count": 4,
+                    "percentage": "7.69"
+                },
+                {
+                    "option": "蓝色",
+                    "count": 6,
+                    "percentage": "11.54"
+                },
+                {
+                    "option": "黑色",
+                    "count": 13,
+                    "percentage": "25.00"
+                },
+                {
+                    "option": "绿色",
+                    "count": 2,
+                    "percentage": "3.85"
+                },
+                {
+                    "option": "黄色",
+                    "count": 4,
+                    "percentage": "7.69"
+                },
+                {
+                    "option": "紫色",
+                    "count": 1,
+                    "percentage": "1.92"
+                },
+                {
+                    "option": "Other",
+                    "count": 7,
+                    "percentage": "13.46"
+                }
+            ],
+            "other_options": [
+                "粉色",
+                "青色",
+                "新颜色"
+            ]
+        },
+        {
+            "label": "兴趣",
+            "type": "checkbox",
+            "result": [
+                {
+                    "option": "跑步",
+                    "count": 3
+                },
+                {
+                    "option": "编程",
+                    "count": 23
+                },
+                {
+                    "option": "读书",
+                    "count": 12
+                },
+                {
+                    "option": "游泳",
+                    "count": 11
+                },
+                {
+                    "option": "音乐",
+                    "count": 9
+                },
+                {
+                    "option": "下棋",
+                    "count": 3
+                },
+                {
+                    "option": "游戏",
+                    "count": 40
+                }
+            ]
+        },
+        {
+            "label": "给我们的建议",
+            "type": "text",
+            "texts": [
+                "建议信文本1",
+                "建议信文本2",
+                "建议信文本3",
+                "建议信文本4",
+                "建议信文本5",
+                "建议信文本6",
+                "12345",
+                "1234554321",
+                "555",
+                "yyy",
+                "uuu",
+                "iii",
+                "ooo",
+                "ppp"
+            ]
+        }
+    ]
+}

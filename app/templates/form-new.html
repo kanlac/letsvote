@@ -1,0 +1,26 @@
+<form action="{{ url_for('ques.questionnaire', slug=slug) }}" method="POST">
+	{% for q in questionnaire.questions %}
+
+	<h3>{{ q.label }}</h3>
+
+	{% if q.type == "text" %}
+	<textarea name="{{ q.label }}"></textarea>
+	{% elif q.type in ("radio", "checkbox") %}
+	<ul class="options">
+		{% for opt in q.options %}
+		<li>
+			<input type="{{ q.type }}" name="{{ q.label }}" value="{{ opt }}">
+			{% if opt == 'Other' %}
+			<span>其他</span>
+			<input type="text" name="other_option">
+			{% else %}
+			<span>{{ opt }}</span>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul><br>
+	{% endif %}
+
+	{% endfor %}
+	<input type="submit" name="submit">
+</form>
