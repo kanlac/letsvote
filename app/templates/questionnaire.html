@@ -1,11 +1,28 @@
 {% extends "base.html" %}
 
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/questionnaire.css') }}">
+{% endblock %}
+
 {% block title %}
   {{ questionnaire.title }}
 {% endblock title %}
 
 {% block page_content %}
   <h1>{{ questionnaire.title }}</h1>
-  <p>{{ questionnaire.comment }}</p>
+  {% if questionnaire.comment %}
+  <pre>{{ questionnaire.comment }}</pre>
+  {% endif %}
   {% include "form-new.html" %}
 {% endblock page_content %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+$('#form').submit(function () {
+	alert("dadada");
+	return false;
+}
+</script>
+{% endblock %}

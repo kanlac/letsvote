@@ -1,7 +1,7 @@
-<form action="{{ url_for('ques.questionnaire', slug=slug) }}" method="POST">
+<form action="{{ url_for('ques.questionnaire', slug=slug) }}" method="POST" id="form">
 	{% for q in questionnaire.questions %}
 
-	<h3>{{ q.label }}</h3>
+	<h5>{{ q.label }}{% if q.required %}*{% endif %}</h5>
 	<p>{{ q.desc }}</p>
 
 	{% if q.type == "text" %}

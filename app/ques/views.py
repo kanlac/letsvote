@@ -186,7 +186,7 @@ def originate():
 		file_path = os.path.join(_get_option('DIR'), slug+'.json')
 		with open(file_path, 'w', encoding='utf8') as f:
 			json.dump(questionnaire, f, indent=4, ensure_ascii=False)
-		flash('Successfully created questionnaire!')
+		flash('成功创建问卷！分发本页面 URL 即可让用户参与本问卷调查。')
 		return redirect(url_for('ques.questionnaire', slug=slug))
 
 	return render_template('originate.html')
