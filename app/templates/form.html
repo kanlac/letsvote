@@ -1,47 +1,28 @@
-<form action="{{ url_for('ques.questionnaire', slug=slug) }}" method="POST">
-{% for q in questionnaire.questions %}
+<form action="{{ url_for('ques.questionnaire', slug=slug) }}" method="POST" id="form">
+	{% for q in questionnaire.questions %}
 
-	{% set qloop = loop %}
-	{% set qid = "q{0}".format(loop.index0) %} {# 如在第一次循环中，qid=q0，第二次循环 qid=q1 #}
+	<h5>{{ q.label }}{% if q.required %}*{% endif %}</h5>
+	<p>{{ q.desc }}</p>
 
-	<div class="question">
+	{% if q.type == "text" %}
+	<textarea name="{{ q.label }}" {% if q.required %}required{% endif %}></textarea>
+	{% elif q.type in ("radio", "checkbox") %}
+	<ul class="options">
+		{% for opt in q.options %}
+		<li>
+			<input type="{{ q.type }}" name="{{ q.label }}" value="{{ opt }}" {% if q.required and q.type == 'radio' %}required{% endif %}>
 
-		<label for="{{ qid }}"> {# 虽然写了 for 属性，但是并没有绑定任何表单元素吧 #}
-			<span class="question-title">{{ q.label }}</span>
-			{% if q.required %}
-			<sup>*</sup>
+			{% if opt == 'Other' %}
+			<span>其他</span>
+			<input type="text" name="other_option">
+			{% else %}
+			<span>{{ opt }}</span>
 			{% endif %}
+		</li>
+		{% endfor %}
+	</ul><br>
+	{% endif %}
 
-			{% if q.error %} {# 起作用了吗？ #}
-			<span class="error">
-				{{ questionnaire.messages.error.required }}
-			</span>
-			{% endif %}
-
-	 	</label>
-
-		{% if q.help %}
-		<p>{{ q.help }}</p>
-		{% endif %}
-
-		{% if q.type == "text" %}
-		<textarea id="{{ qid }}" name="{{ qid }}">{{ q.value }}</textarea> {# q.value 是啥？是报错的部分吗？ #}
-		{% elif q.type in ("radio", "checkbox") %}
-		<ul class="options">
-			{% for opt in q.options %}
-			<li>
-				{% set checked = "checked" if opt == q.value or opt in q.get('values', []) else "" %}
-				<label>
-					<input name="{{ qid }}" type="{{ q.type }}" value="{{ opt }}" {{ checked }}>
-					<span>{{ opt }}</span>
-				</label>
-			</li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-
-	</div>
-{% endfor %}
-
-	<input type="submit" name="submit" value="{{ questionnaire.submit }}"> {# value 设的是 ques.__init__ 配置的参数 #}
+	{% endfor %}
+	<input type="submit" name="submit">
 </form>

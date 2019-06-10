@@ -14,15 +14,16 @@
   {% if questionnaire.comment %}
   <pre>{{ questionnaire.comment }}</pre>
   {% endif %}
-  {% include "form-new.html" %}
+  {% include "form.html" %}
 {% endblock page_content %}
 
 {% block scripts %}
 {{ super() }}
 <script type="text/javascript">
-$('#form').submit(function () {
-	alert("dadada");
-	return false;
-}
+// $('#form').submit(function () {
+// 	var mandatories = document.getElements
+// 	alert("dadada");
+// 	return false;
+// });
 </script>
 {% endblock %}
