@@ -2,6 +2,7 @@
 	{% for q in questionnaire.questions %}
 
 	<h3>{{ q.label }}</h3>
+	<p>{{ q.desc }}</p>
 
 	{% if q.type == "text" %}
 	<textarea name="{{ q.label }}"></textarea>

@@ -5,7 +5,7 @@
         {
             "type": "checkbox",
             "label": "What text editors do you use?",
-            "help": "For programming and other purposes.",
+            "desc": "For programming and other purposes.",
             "required": true,
             "options": [
                 "Ed",
@@ -28,7 +28,7 @@
         {
             "type": "text",
             "label": "Why not cat(1)?",
-            "help": "Please, explain in one paragraph."
+            "desc": "Please, explain in one paragraph."
         }
     ]
 }

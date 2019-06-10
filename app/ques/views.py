@@ -9,6 +9,7 @@ from datetime import datetime
 from copy import deepcopy
 from flask_login import login_required, current_user
 from pathlib import Path
+import string
 
 
 @ques.route('/', methods=['GET'])
@@ -32,6 +33,9 @@ def questionnaire(slug):
 		result_dict = defaultdict(lambda: tuple(None, None)) # 意思是如果访问一个不存在的键值对，会自动创建并返回一个值为空元组
 		form = request.form
 		result_file_path = os.path.join(_get_option('RESULTS_DIR'), slug+'.json')
+
+		print(f"submit form: {form}")
+
 		# 先查看是否已存在 result json
 		if Path(result_file_path).is_file(): # 如果存在，result_dict 加载内容并进行更新
 			with open(result_file_path) as f:
@@ -116,9 +120,75 @@ def results(slug):
 @login_required
 def originate():
 	if request.method == 'POST':
-		form = request.form
-		print("form:")
-		print(form)
+		questionnaire = defaultdict(lambda: tuple(None, None))
+		questionnaire['questions'] = list()
+		questionnaire['creator'] = current_user.username
+		log_list = list()
+		q_dict = dict()
+		opt = list()
+		for item in dict(request.form).items():
+			print('\n------')
+			print(f"log_list: {log_list}")
+			key = item[0]
+			value_list = item[1] # contains only one element except when key == 'qX-option_item'
+			print(f'key: {key}')
+			print(f'value_list: {value_list}')
+			if key == 'title':
+				questionnaire['title'] = value_list[0]
+			elif key == 'comment':
+				questionnaire['comment'] = value_list[0]
+			elif key.startswith('q'):
+				id_log = key[0:].split('-')[0];
+				k = key.split('-')[1];
+				print(f"id_log: {id_log}")
+				print(f"k: {k}")
+				if id_log in log_list: # 已记录的问题
+					if k == 'label' or k == 'desc':
+						print(f'test k: {k}')
+						q_dict[k] = value_list[0]
+					elif k == 'option_item':
+						for o in value_list:
+							opt.append(o)
+					elif k == 'allow_other':
+						opt.append('Other')
+						q_dict['other_options'] = ''
+					elif k == 'is_mandatory':
+						q_dict['required'] = True
+				else: # 新的问题
+					assert (k == 'type'), "The first key of a question should be qXX-type"
+					log_list.append(id_log)
+					if q_dict: # save and clear out q_dict
+						print('q_dict not empty.')
+						if 'type' in q_dict and q_dict['type'] != 'text':
+							q_dict['options'] = opt.copy()
+						questionnaire['questions'].append(q_dict.copy())
+						print(f'updating questionnaire: {questionnaire}')
+						q_dict.clear()
+						opt.clear()
+
+					q_dict[k] = value_list[0]
+
+			print(f'check q_dict: {q_dict}')
+			print(f'check questionnaire: {questionnaire}')
+			print('------\n')
+
+		print(f'kljwl {q_dict}')
+		if q_dict['type'] == "radio" or q_dict['type'] == "checkbox":
+			q_dict['options'] = opt.copy()
+		questionnaire['questions'].append(q_dict.copy())
+
+		# 打印结果 questionnaire,如果吻合就存储为 json 文件，文件名为标题小写化去掉空格和符号，提示创建成功，然后进入该问卷
+		print('final result:')
+		print(f'{questionnaire}\n\n')
+
+		rm_punc_translator = str.maketrans('', '', string.punctuation)
+		slug = questionnaire['title'].lower().replace(' ', '').translate(rm_punc_translator)
+		file_path = os.path.join(_get_option('DIR'), slug+'.json')
+		with open(file_path, 'w', encoding='utf8') as f:
+			json.dump(questionnaire, f, indent=4, ensure_ascii=False)
+		flash('Successfully created questionnaire!')
+		return redirect(url_for('ques.questionnaire', slug=slug))
+
 	return render_template('originate.html')
 
 

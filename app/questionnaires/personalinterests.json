@@ -32,7 +32,7 @@
 			"type": "checkbox",
 			"label": "兴趣",
 			"required": true,
-			"help": "可以选择多个答案",
+			"desc": "可以选择多个答案",
 			"options": [
 				"跑步",
 				"编程",
@@ -46,7 +46,7 @@
 		{
 			"type": "text",
 			"label": "给我们的建议",
-			"help": "帮助我们改进这份问卷。"
+			"desc": "帮助我们改进这份问卷。"
 		}
 	]
 }
