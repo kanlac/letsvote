@@ -8,10 +8,8 @@
 <ul class="questionnaire-list">
 {% for slug, data in questionnaires %}
 	<li>
-		<a href="{{ url_for('ques.results', slug=slug) }}">{{ data.title }}</a>
-		<ul class="form">
-			<li><a href="{{ url_for('ques.questionnaire', slug=slug) }}">Form</a></li>
-		</ul>
+		<a href="{{ url_for('ques.questionnaire', slug=slug) }}">{{ data.title }}</a>
+		[<a href="{{ url_for('ques.results', slug=slug) }}">result</a>]
 	</li>
 {% else %}
 <li>There is no questionnaire yet.</li>
