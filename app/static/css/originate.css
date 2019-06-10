@@ -1,3 +1,40 @@
-textarea {
-	border: 1px solid black;
+input, textarea {
+	border: 1px solid #33333314;
+	border-radius: 2px;
+}
+
+.option-text {
+	text-align: center;
+	color: #333;
+	font-size: 0.8em;
+}
+
+.del-question {
+	color: red;
+	display: block;
+	float: right;
+}
+
+.subtitle {
+	text-align: center;
+}
+
+.submit-btn {
+	text-align: center;
+}
+
+.q-title {
+	font-size: 1.3em;
+	width: 100%;
+	font-weight: 500;
+	color: #555;
+	border: none;
+}
+
+.q-comment {
+	color: #555;
+}
+
+.new-question {
+	text-decoration: underline;
 }
