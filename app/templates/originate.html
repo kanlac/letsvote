@@ -59,11 +59,17 @@
 		}
 	}
 
-	// 检查必填项都不为空
 	$('#form').submit(function () {
+		// 检查至少填写了一个问题
+		var q_label = document.getElementsByClassName('q-label');
+		if (q_label.length == 0) {
+			alert('请至少填写一个问题。');
+			return false;
+		}
+
+		// 检查必填项都不为空
 		var mandatories = document.getElementsByClassName('required');
 		for (var i = 0; i < mandatories.length; i++) {
-			console.log(mandatories[i].value)
 			if (mandatories[i].value ===  '') {
 				alert('Check inputs.');
 				return false;
