@@ -10,11 +10,18 @@
 {% endblock title %}
 
 {% block page_content %}
-  <h1>{{ questionnaire.title }}</h1>
-  {% if questionnaire.comment %}
-  <pre>{{ questionnaire.comment }}</pre>
-  {% endif %}
-  {% include "form.html" %}
+<h1>{{ questionnaire.title }}</h1>
+{% if questionnaire.comment %}
+<pre>{{ questionnaire.comment }}</pre>
+{% endif %}
+
+<a class="lightbox" href="#qrcode">展示二维码</a> 
+<div class="lightbox-target" id="qrcode">
+   <img src="{{ url_for('ques.get_qrcode', filename=slug+'.png') }}" alt="Not found" />
+   <a class="lightbox-close" href="#"></a>
+</div><br>
+
+{% include "form.html" %}
 {% endblock page_content %}
 
 {% block scripts %}

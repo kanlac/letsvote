@@ -1,5 +1,5 @@
 from . import ques
-from flask import render_template, request, Response, current_app as app, abort, redirect, url_for, flash
+from flask import render_template, request, Response, current_app as app, abort, redirect, url_for, flash, send_from_directory
 from collections import defaultdict
 from functools import wraps
 import os
@@ -11,7 +11,6 @@ from flask_login import login_required, current_user
 from pathlib import Path
 import random
 import pyqrcode
-import pypng
 
 
 @ques.route('/', methods=['GET'])
@@ -21,7 +20,6 @@ def square():
 			 filter(lambda s: not s.startswith('_') and s.endswith('.json'),
 					os.listdir(dir_)))
 	return render_template('index.html', questionnaires=qs)
-
 
 @ques.route('/<slug>', methods=['GET', 'POST'])
 def questionnaire(slug):
@@ -36,11 +34,14 @@ def questionnaire(slug):
 		form = request.form
 		result_file_path = os.path.join(_get_option('RESULTS_DIR'), slug+'.json')
 
+		print(f"form: {form}")
+
 		# 先查看是否已存在 result json
 		if Path(result_file_path).is_file(): # 如果存在，result_dict 加载内容并进行更新
 			with open(result_file_path) as f:
 				result_dict = json.load(f)
 			result_dict['total'] = result_dict['total']+1
+			print(f"result_dict: {result_dict}")
 			# 加入文本，选择项的 count++，所有项的 percentage 清空
 			for q in result_dict['questions']:
 				if 'texts' in q: # 文本题
@@ -48,6 +49,7 @@ def questionnaire(slug):
 						q['texts'].append(form[q['label']])
 				elif 'result' in q: # 选择题
 					for r in q['result']:
+						print(f"r option: {r['option']}, q label: {q['label']}")
 						if r['option'] in form[q['label']]:
 							r['count'] = r['count']+1
 						if 'percentage' in r:
@@ -68,6 +70,7 @@ def questionnaire(slug):
 			for question in data.get('questions', []): # 对问卷表里的每个问题，全部存到 q_list 然后赋给 result_dict['questions']
 				q = dict()
 				q['label'] = question['label']
+				print(f"q['label']: {q['label']}")
 				q['type'] = question['type']
 
 				if q['type'] == 'text': # 文本题
@@ -170,12 +173,29 @@ def originate():
 		if os.path.exists(file_path):
 			slug = questionnaire['slug'] + str(random.randint(100, 999))
 			file_path = os.path.join(_get_option('DIR'), slug +'.json')
+
+		# 创建并存储 qrcode
+		url = _get_option('SITE_BASE') + slug
+		qrcode = pyqrcode.create(url)
+		qrcode_dir = os.path.join(_get_option('QRCODE_DIR'))
+		if not (os.path.isdir(qrcode_dir)):
+			try:
+				os.mkdir(qrcode_dir)
+			except OSError:
+				print(f"Create qrcode directory failed.")
+		qrcode.png(slug + '.png', scale=4)
+		os.rename(os.getcwd() + '/' + slug + '.png', qrcode_dir + '/' + slug + '.png')
+
 		with open(file_path, 'w', encoding='utf8') as f:
 			json.dump(questionnaire, f, indent=4, ensure_ascii=False)
-		flash('成功创建问卷！分发本页面 URL 即可让用户参与本问卷调查。')
+		flash('成功创建问卷！扫描二维码或分发本页面 URL 即可让用户参与本问卷调查。')
 		return redirect(url_for('ques.questionnaire', slug=slug))
 
 	return render_template('originate.html')
+
+@ques.route('/qrcode/<path:filename>')
+def get_qrcode(filename):
+    return send_from_directory(load_config('QUESTIONNAIRE_QRCODE_DIR'), filename, as_attachment=True)
 
 
 
@@ -200,6 +220,16 @@ def _get_option(opt, val=None):
 	except KeyError:
 		if val is None:
 			abort(500, "%s is not configured" % opt)
+	return val
+
+
+def load_config(opt):
+	val = None
+	try:
+		val = app.config[opt]
+	except:
+		if val is None:
+			abort(400, "%s is not configured." % opt)
 	return val
 
 

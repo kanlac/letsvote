@@ -8,6 +8,7 @@ class Config:
 	QUESTIONNAIRE_DIR = os.path.join(basedir, 'app/questionnaires')
 	QUESTIONNAIRE_SUBMISSIONS_DIR = os.path.join(basedir, 'app/submissions')
 	QUESTIONNAIRE_RESULTS_DIR = os.path.join(basedir, 'app/results')
+	QUESTIONNAIRE_QRCODE_DIR = os.path.join(basedir, 'app/questionnaires/qrcode')
 
 	QUESTIONNAIRE_BASIC_AUTH = ('admin', 'secret')
 
@@ -32,7 +33,7 @@ class Config:
 class DevelopmentConfig(Config):
 	DEBUG = True
 	SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:tbu33p6r9@localhost/letsvote'
-
+	QUESTIONNAIRE_SITE_BASE = '127.0.0.1:5000/'
 
 class TestingConfig(Config):
 	TESTING = True

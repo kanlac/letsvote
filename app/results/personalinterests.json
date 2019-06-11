@@ -1,5 +1,5 @@
 {
-    "total": 52,
+    "total": 54,
     "questions": [
         {
             "label": "你的年龄",
@@ -8,22 +8,22 @@
                 {
                     "option": "12 周岁以下",
                     "count": 4,
-                    "percentage": "7.69"
+                    "percentage": "7.41"
                 },
                 {
                     "option": "13-19 岁",
                     "count": 14,
-                    "percentage": "26.92"
+                    "percentage": "25.93"
                 },
                 {
                     "option": "20-28 岁",
-                    "count": 23,
-                    "percentage": "44.23"
+                    "count": 25,
+                    "percentage": "46.30"
                 },
                 {
                     "option": "29 岁及以上",
                     "count": 14,
-                    "percentage": "26.92"
+                    "percentage": "25.93"
                 }
             ]
         },
@@ -34,37 +34,37 @@
                 {
                     "option": "红色",
                     "count": 4,
-                    "percentage": "7.69"
+                    "percentage": "7.41"
                 },
                 {
                     "option": "蓝色",
                     "count": 6,
-                    "percentage": "11.54"
+                    "percentage": "11.11"
                 },
                 {
                     "option": "黑色",
-                    "count": 13,
-                    "percentage": "25.00"
+                    "count": 14,
+                    "percentage": "25.93"
                 },
                 {
                     "option": "绿色",
-                    "count": 2,
-                    "percentage": "3.85"
+                    "count": 3,
+                    "percentage": "5.56"
                 },
                 {
                     "option": "黄色",
                     "count": 4,
-                    "percentage": "7.69"
+                    "percentage": "7.41"
                 },
                 {
                     "option": "紫色",
                     "count": 1,
-                    "percentage": "1.92"
+                    "percentage": "1.85"
                 },
                 {
                     "option": "Other",
                     "count": 7,
-                    "percentage": "13.46"
+                    "percentage": "12.96"
                 }
             ],
             "other_options": [
@@ -87,7 +87,7 @@
                 },
                 {
                     "option": "读书",
-                    "count": 12
+                    "count": 14
                 },
                 {
                     "option": "游泳",
