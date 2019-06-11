@@ -11,8 +11,9 @@
 <h1>创建新问卷</h1><br>
 
 <form method="post" id="form">
-	<input placeholder="请输入问卷标题…" name="title" type="text" class="q-title required"><br><br><br>
-	<textarea class="q-comment" placeholder="介绍（选填）" name="comment"></textarea>
+	<input placeholder="请输入问卷标题…" name="title" type="text" class="questionnaire-title required"><br><br><br>
+	<input placeholder= "slug（请仅包含小写英文字母、数字和短横）" type="text" name="slug" class="questionnaire-slug required" pattern="[a-z\d-]*"><br><br>
+	<textarea class="questionnaire-comment" placeholder="介绍（选填）" name="comment"></textarea>
 	<hr>
 
 	<div id="question-area"></div><hr>
@@ -44,7 +45,7 @@
 	function add_option(q_id) {
 		var list = document.getElementById("q" + q_id + "-list");
 		var opt = document.createElement('li');
-		opt.innerHTML = "<input class='option_item required' type='text' name='q" + q_id + "-option_item'>";
+		opt.innerHTML = "<input class='option_item required' type='text' name='q" + q_id + "-option_item' placeholder='填写选项…'>";
 		list.appendChild(opt);
 
 	}
@@ -83,7 +84,7 @@
 			case 1: q_div.setAttribute('class', 'radio-field');
 					q_div.innerHTML = "<input style='display: none;' name='q" + q_id + "-type' value='radio'>" +
 						"<h4>❧ 单选 ❧</h4>" +
-						"<p>问题：<input type='text' name='q" + q_id + "-label' class='required'></p>" +
+						"<p>问题：<input type='text' name='q" + q_id + "-label' class='q-label required'></p>" +
 						"<p>描述（选填）：<input type='text' name='q" + q_id + "-desc'></p>" +
 						"<p class='option-text'>-- -- 选项 -- --</p>" +
 						"<a class='option-add' onclick='add_option(" + q_id + ")'>add</a>&nbsp;&nbsp;&nbsp;" +
@@ -104,7 +105,7 @@
 			case 2: q_div.setAttribute('class', 'checkbox-field');
 					q_div.innerHTML = "<input style='display: none;' name='q" + q_id + "-type' value='checkbox'>" +
 						"<h4>❧ 多选 ❧</h4>" +
-						"<p>问题：<input type='text' name='q" + q_id + "-label' class='required'></p>" +
+						"<p>问题：<input type='text' name='q" + q_id + "-label' class='q-label required'></p>" +
 						"<p>描述（选填）：<input type='text' name='q" + q_id + "-desc'></p>" +
 						"<p class='option-text'>-- 选项 --</p>" +
 						"<a class='option-add' onclick='add_option(" + q_id + ")'>add</a>&nbsp;&nbsp;&nbsp;" +
@@ -125,7 +126,7 @@
 			case 3: q_div.setAttribute('class', 'text-field');
 					q_div.innerHTML = "<input style='display: none;' name='q" + q_id + "-type' value='text'>" +
 						"<h4>❧ 文本 ❧</h4>" +
-						"<p>问题：<input type='text' name='q" + q_id + "-label' class='required'></p>" +
+						"<p>问题：<input type='text' name='q" + q_id + "-label' class='q-label required'></p>" +
 						"<p>描述（选填）：<input type='text' name='q" + q_id + "-desc'></p>" +
 						"<input type='checkbox' name='q" + q_id + "-is_mandatory'>是否必选<br>" +
 						"<div class='del-question' onclick='del_question(" + q_id + ")'>删除</div><br><br>";

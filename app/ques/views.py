@@ -9,7 +9,7 @@ from datetime import datetime
 from copy import deepcopy
 from flask_login import login_required, current_user
 from pathlib import Path
-import string
+import random
 
 
 @ques.route('/', methods=['GET'])
@@ -135,6 +135,8 @@ def originate():
 			print(f'value_list: {value_list}')
 			if key == 'title':
 				questionnaire['title'] = value_list[0]
+			elif key == 'slug':
+				questionnaire['slug'] = value_list[0]
 			elif key == 'comment':
 				questionnaire['comment'] = value_list[0]
 			elif key.startswith('q'):
@@ -181,9 +183,11 @@ def originate():
 		print('final result:')
 		print(f'{questionnaire}\n\n')
 
-		rm_punc_translator = str.maketrans('', '', string.punctuation)
-		slug = questionnaire['title'].lower().replace(' ', '').translate(rm_punc_translator)
+		slug = questionnaire['slug']
 		file_path = os.path.join(_get_option('DIR'), slug+'.json')
+		if os.path.exists(file_path):
+			slug = questionnaire['slug'] + str(random.randint(100, 999))
+			file_path = os.path.join(_get_option('DIR'), slug +'.json')
 		with open(file_path, 'w', encoding='utf8') as f:
 			json.dump(questionnaire, f, indent=4, ensure_ascii=False)
 		flash('成功创建问卷！分发本页面 URL 即可让用户参与本问卷调查。')

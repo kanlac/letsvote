@@ -23,7 +23,7 @@ input, textarea {
 	text-align: center;
 }
 
-.q-title {
+.questionnaire-title {
 	font-size: 1.3em;
 	width: 100%;
 	font-weight: 500;
@@ -31,10 +31,22 @@ input, textarea {
 	border: none;
 }
 
-.q-comment {
+.questionnaire-slug {
+	width: 100%;
+	color: #333333b0;
+    font-weight: 300;
+    font-family: monospace;
+}
+
+.questionnaire-comment {
 	color: #555;
 }
 
 .new-question {
 	text-decoration: underline;
+}
+
+.q-label {
+	width: 100%;
+	font-weight: 500;
 }
