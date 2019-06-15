@@ -1,3 +1,5 @@
+import os
+
 def init_data(db):
 	from app.models import User
 
