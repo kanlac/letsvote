@@ -14,6 +14,7 @@ Mako==1.0.12
 MarkupSafe==1.1.1
 mysql-connector-python==8.0.16
 protobuf==3.7.1
+psycopg2-binary==2.8.3
 pypng==0.0.19
 PyQRCode==1.2.1
 python-dateutil==2.8.0
