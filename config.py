@@ -32,16 +32,22 @@ class Config:
 
 class DevelopmentConfig(Config):
 	DEBUG = True
-	# SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:tbu33p6r9@localhost/letsvote'
-	SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:tbu33p6r9@localhost/letsvote'
+	SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/letsvote'
 	QUESTIONNAIRE_SITE_BASE = '127.0.0.1:5000/'
+
 
 class TestingConfig(Config):
 	TESTING = True
 
 
+class ProductionConfig(Config):
+	SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/letsvote'
+	QUESTIONNAIRE_SITE_BASE = 'https://letsvote19.herokuapp.com/'
+
+
 config = {
 	'development': DevelopmentConfig,
 	'testing': TestingConfig,
+	'production': ProductionConfig,
 	'default': DevelopmentConfig
 }
