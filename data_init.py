@@ -21,7 +21,7 @@ def init_data(db):
 if __name__ == '__main__':
 	from app import db, create_app
 
-	app = create_app('development')
+	app = create_app(os.getenv('FLASK_CONFIG') or 'production')
 	app.app_context().push()
 	db.init_app(app)
 	init_data(db)
