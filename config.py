@@ -3,7 +3,7 @@ import os
 class Config:
 	basedir = os.path.abspath(os.path.dirname(__file__))
 
-	SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string' # 用于表单的 CSRF
+	SECRET_KEY = os.environ.get('SECRET_KEY') or '?r1us6iLZ(yh' # 用于表单的 CSRF
 
 	QUESTIONNAIRE_DIR = os.path.join(basedir, 'app/questionnaires')
 	QUESTIONNAIRE_SUBMISSIONS_DIR = os.path.join(basedir, 'app/submissions')
@@ -32,7 +32,8 @@ class Config:
 
 class DevelopmentConfig(Config):
 	DEBUG = True
-	SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:tbu33p6r9@localhost/letsvote'
+	# SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:tbu33p6r9@localhost/letsvote'
+	SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:tbu33p6r9@localhost/letsvote'
 	QUESTIONNAIRE_SITE_BASE = '127.0.0.1:5000/'
 
 class TestingConfig(Config):
@@ -42,6 +43,5 @@ class TestingConfig(Config):
 config = {
 	'development': DevelopmentConfig,
 	'testing': TestingConfig,
-
 	'default': DevelopmentConfig
 }
