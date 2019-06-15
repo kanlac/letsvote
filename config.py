@@ -41,7 +41,7 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-	SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/letsvote:5432'
+	SQLALCHEMY_DATABASE_URI = 'postgres://ieoxmhcknxirqf:8dde7911fa035f8f02e66811241216535da00903a1240439fc8bdab2a275a1e6@ec2-107-22-238-217.compute-1.amazonaws.com:5432/d2o7vjbnvqgv8r'
 	QUESTIONNAIRE_SITE_BASE = 'https://letsvote19.herokuapp.com/'
 
 
