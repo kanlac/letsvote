@@ -30,8 +30,10 @@ def delete(slug):
 	if questionnaire['creator'] != current_user.username:
 		flash('You are not granted.')
 	else:
-		qfile = os.path.join(_get_option('DIR'), slug + '.json')
-		os.remove(qfile)
+		q_file = os.path.join(_get_option('DIR'), slug + '.json')
+		qrcode_file = os.path.join(_get_option('QRCODE_DIR'), slug + '.png')
+		os.remove(q_file)
+		os.remove(qrcode_file)
 		flash('成功删除问卷。')
 
 	return redirect(url_for('ques.square'))

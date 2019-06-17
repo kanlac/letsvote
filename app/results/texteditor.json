@@ -1,0 +1,60 @@
+{
+    "total": 1,
+    "questions": [
+        {
+            "label": "What text editors do you use?",
+            "type": "checkbox",
+            "result": [
+                {
+                    "option": "Ed",
+                    "count": 0
+                },
+                {
+                    "option": "Vi",
+                    "count": 1
+                },
+                {
+                    "option": "Emacs",
+                    "count": 0
+                },
+                {
+                    "option": "+Other",
+                    "count": 0
+                }
+            ]
+        },
+        {
+            "label": "What text editor do you prefer?",
+            "type": "radio",
+            "result": [
+                {
+                    "option": "Ed",
+                    "count": 0,
+                    "percentage": 0
+                },
+                {
+                    "option": "Vi",
+                    "count": 1,
+                    "percentage": 100
+                },
+                {
+                    "option": "Emacs",
+                    "count": 0,
+                    "percentage": 0
+                },
+                {
+                    "option": "+Other",
+                    "count": 0,
+                    "percentage": 0
+                }
+            ]
+        },
+        {
+            "label": "Why not cat(1)?",
+            "type": "text",
+            "texts": [
+                ""
+            ]
+        }
+    ]
+}
