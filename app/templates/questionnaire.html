@@ -5,12 +5,11 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/questionnaire.css') }}">
 {% endblock %}
 
-{% block title %}
-  {{ questionnaire.title }}
-{% endblock title %}
+{% block title %}{{ questionnaire.title }}{% endblock title %}
 
 {% block page_content %}
 <h1>{{ questionnaire.title }}</h1>
+<p>发起人：{{ questionnaire.creator }}</p>
 {% if questionnaire.comment %}
 <pre>{{ questionnaire.comment }}</pre>
 {% endif %}
@@ -22,7 +21,8 @@
 </div><br>
 
 {% include "form.html" %}
-{% endblock page_content %}
+{% endblock %}
+
 
 {% block scripts %}
 {{ super() }}

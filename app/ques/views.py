@@ -129,23 +129,33 @@ def originate():
 		log_list = list()
 		q_dict = dict()
 		opt = list()
-		for item in dict(request.form).items():
+		print(f'request.form: {request.form}')
+		print(f"test: {request.form.getlist('q1-option_item')}")
+		for item in request.form.items():
+			print(f'---\nitem: {item}')
+			print(f'q_dict: {q_dict}')
+			print(f'log_list: {log_list}')
 			key = item[0]
-			value_list = item[1] # contains only one element except when key == 'qX-option_item'
+			value = item[1]
+			print(f'key: {key}, value: {value}')
 			if key == 'title':
-				questionnaire['title'] = value_list[0]
+				questionnaire['title'] = value
 			elif key == 'slug':
-				questionnaire['slug'] = value_list[0]
+				questionnaire['slug'] = value
 			elif key == 'comment':
-				questionnaire['comment'] = value_list[0]
+				questionnaire['comment'] = value
 			elif key.startswith('q'):
 				id_log = key[0:].split('-')[0];
-				k = key.split('-')[1];
+				print(f'id_log: {id_log}')
+				k = key.split('-')[1]
 				if id_log in log_list: # 已记录的问题
 					if k == 'label' or k == 'desc':
-						q_dict[k] = value_list[0]
+						print(f'k: {k}')
+						print(f'q_dict: {q_dict}')
+						q_dict[k] = value
 					elif k == 'option_item':
-						for o in value_list:
+						c_key = id_log + '-option_item'
+						for o in request.form.getlist(c_key):
 							opt.append(o)
 					elif k == 'allow_other':
 						opt.append('Other')
@@ -156,13 +166,16 @@ def originate():
 					assert (k == 'type'), "The first key of a question should be qXX-type"
 					log_list.append(id_log)
 					if q_dict: # save and clear out q_dict
+						print('save q_dict...')
 						if 'type' in q_dict and q_dict['type'] != 'text':
 							q_dict['options'] = opt.copy()
 						questionnaire['questions'].append(q_dict.copy())
 						q_dict.clear()
 						opt.clear()
 
-					q_dict[k] = value_list[0]
+					q_dict[k] = value
+
+			print('---\n')
 
 		if q_dict['type'] == "radio" or q_dict['type'] == "checkbox":
 			q_dict['options'] = opt.copy()
