@@ -10,6 +10,9 @@
 {% block page_content %}
 <h1>{{ questionnaire.title }}</h1>
 <p>发起人：{{ questionnaire.creator }}</p>
+{% if questionnaire.creator == current_user.username %}
+	<a href="{{ url_for('ques.delete', slug=slug) }}">删除此问卷</a>
+{% endif %}
 {% if questionnaire.comment %}
 <pre>{{ questionnaire.comment }}</pre>
 {% endif %}
@@ -21,16 +24,4 @@
 </div><br>
 
 {% include "form.html" %}
-{% endblock %}
-
-
-{% block scripts %}
-{{ super() }}
-<script type="text/javascript">
-// $('#form').submit(function () {
-// 	var mandatories = document.getElements
-// 	alert("dadada");
-// 	return false;
-// });
-</script>
 {% endblock %}
