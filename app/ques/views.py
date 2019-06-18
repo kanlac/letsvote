@@ -44,7 +44,6 @@ def questionnaire(slug):
 
 	form = request.form
 	print(f"form: {form}")
-	print(f'slug: {slug}, type: {type(slug)}')
 	result_file_path = os.path.join(_get_option('RESULTS_DIR'), slug+'.json')
 
 	assert(Path(result_file_path).is_file())
@@ -131,7 +130,7 @@ def questionnaire(slug):
 	return redirect(url_for('ques.square'))
 
 
-@ques.route('/<slug>/results', methods=['GET'])
+@ques.route('/results/<slug>', methods=['GET'])
 @login_required
 def results(slug):
 	form = _get_questionnaire_data(slug)
