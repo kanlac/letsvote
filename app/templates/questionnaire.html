@@ -11,6 +11,7 @@
 <h1>{{ questionnaire.title }}</h1>
 <p>发起人：{{ questionnaire.creator }}</p>
 {% if questionnaire.creator == current_user.username %}
+	<a href="{{ url_for('ques.results', slug=slug) }}">查看结果</a> | 
 	<a href="{{ url_for('ques.delete', slug=slug) }}">删除此问卷</a>
 {% endif %}
 {% if questionnaire.comment %}

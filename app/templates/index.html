@@ -9,7 +9,6 @@
 {% for slug, data in questionnaires %}
 	<li>
 		<a href="{{ url_for('ques.questionnaire', slug=slug) }}">{{ data.title }}</a>
-		 | <a href="{{ url_for('ques.results', slug=slug) }}">Result</a>
 	</li>
 {% else %}
 <li>There is no questionnaire yet.</li>
