@@ -54,7 +54,7 @@ def questionnaire(slug):
 	fcntl.flock(fd, fcntl.LOCK_EX)
 
 	result_dict = defaultdict(lambda: tuple(None, None))
-	result_str = os.read(fd, sys.maxsize).decode("utf-8")
+	result_str = os.read(fd, 100000).decode("utf-8")
 	result_dict = json.loads(result_str)
 	if result_dict['total'] == 0:
 		result_dict['total'] = 1
