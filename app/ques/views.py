@@ -1,16 +1,13 @@
-from . import ques
+import os, json, errno, fcntl, os, signal, time, random, pyqrcode, sys
 from flask import render_template, request, Response, current_app as app, abort, redirect, url_for, flash, send_from_directory
 from collections import defaultdict
 from functools import wraps
-import os
-import json
-import errno
 from datetime import datetime
 from copy import deepcopy
 from flask_login import login_required, current_user
 from pathlib import Path
-import random
-import pyqrcode
+
+from . import ques
 
 
 @ques.route('/', methods=['GET'])
@@ -25,7 +22,6 @@ def square():
 @ques.route('/delete/<slug>')
 @login_required
 def delete(slug):
-
 	questionnaire = _get_questionnaire_data(slug)
 	if questionnaire['creator'] != current_user.username:
 		flash('You are not granted.')
@@ -46,43 +42,23 @@ def questionnaire(slug):
 	if request.method == 'GET':
 		return render_template('questionnaire.html', questionnaire=data, slug=slug)
 
-	# 创建字典 result_dict
-	result_dict = defaultdict(lambda: tuple(None, None)) # 意思是如果访问一个不存在的键值对，会自动创建并返回一个值为空元组
 	form = request.form
+	print(f"form: {form}")
+	print(f'slug: {slug}, type: {type(slug)}')
 	result_file_path = os.path.join(_get_option('RESULTS_DIR'), slug+'.json')
 
-	print(f"form: {form}")
+	assert(Path(result_file_path).is_file())
+	signal.signal(signal.SIGALRM, handler)
+	signal.alarm(5)
 
-	# 先查看是否已存在 result json
-	if Path(result_file_path).is_file(): # 如果存在，result_dict 加载内容并进行更新
-		with open(result_file_path) as f:
-			result_dict = json.load(f)
-		result_dict['total'] = result_dict['total']+1
-		print(f"result_dict: {result_dict}")
-		# 加入文本，选择项的 count++，所有项的 percentage 清空
-		for q in result_dict['questions']:
-			if 'texts' in q: # 文本题
-				if form[q['label']] != '':
-					q['texts'].append(form[q['label']])
-			elif 'result' in q: # 选择题
-				for r in q['result']:
-					print(f"r option: {r['option']}, q label: {q['label']}")
-					if r['option'] in form[q['label']]:
-						r['count'] = r['count']+1
-					if 'percentage' in r:
-						r['percentage'] = 0 # 全部选项的百分比先归零
-				# 如果选的是 Other，要把文本添加到 other_options
-				if form[q['label']] == 'Other':
-					q['other_options'].append(form['other_option'])
-			else:
-				raise Error('No matching question type in result json.')
-		# 更新单选问题的百分比（count/total）
-		for q in result_dict['questions']:
-			if q['type'] == 'radio':
-				for r in q['result']:
-					r['percentage'] = format(int(r['count']) / int(result_dict['total']) * 100, '0.2f')
-	else: # 如不存在，设置 total 为 1，遍历 data 中的 questions，匹配上表单的选项 count 为 1，percentage 为 100（如果是单选的话），其它的 count 和 percentage 都为 0
-		result_dict['total'] = 1;
+	fd = os.open(result_file_path, os.O_RDWR) # 返回值是 int 类型的 file descriptor
+	fcntl.flock(fd, fcntl.LOCK_EX)
+
+	result_dict = defaultdict(lambda: tuple(None, None))
+	result_str = os.read(fd, sys.maxsize).decode("utf-8")
+	result_dict = json.loads(result_str)
+	if result_dict['total'] == 0:
+		result_dict['total'] = 1
 		q_list = list()
 		for question in data.get('questions', []): # 对问卷表里的每个问题，全部存到 q_list 然后赋给 result_dict['questions']
 			q = dict()
@@ -115,13 +91,43 @@ def questionnaire(slug):
 			q_list.append(q)
 
 		result_dict['questions'] = q_list
-		
+	else:
+		result_dict['total'] = result_dict['total']+1
+		print(f"result_dict: {result_dict}")
+		# 加入文本，选择项的 count++，所有项的 percentage 清空
+		for q in result_dict['questions']:
+			if 'texts' in q: # 文本题
+				if form[q['label']] != '':
+					q['texts'].append(form[q['label']])
+			elif 'result' in q: # 选择题
+				for r in q['result']:
+					print(f"r option: {r['option']}, q label: {q['label']}")
+					if r['option'] in form[q['label']]:
+						r['count'] = r['count']+1
+					if 'percentage' in r:
+						r['percentage'] = 0 # 全部选项的百分比先归零
+				# 如果选的是 Other，要把文本添加到 other_options
+				if form[q['label']] == 'Other':
+					q['other_options'].append(form['other_option'])
+			else:
+				raise Error('No matching question type in result json.')
+		# 更新单选问题的百分比（count/total）
+		for q in result_dict['questions']:
+			if q['type'] == 'radio':
+				for r in q['result']:
+					r['percentage'] = format(int(r['count']) / int(result_dict['total']) * 100, '0.2f')
 
-	# 更新完 result_dict 后，创建并覆盖现有的 json
-	with open(result_file_path, 'w', encoding='utf8') as f:
-		json.dump(result_dict, f, indent=4, ensure_ascii=False)
-	# flash 成功消息，进入网站主页
-	flash('Successfully updated result file.')
+	# 关闭字节流，删除旧的文件并创建新的文件
+	os.close(fd)
+	os.remove(result_file_path)
+	open(result_file_path, 'w', encoding='utf8')
+	fd = os.open(result_file_path, os.O_RDWR)
+	os.write(fd, bytes(json.dumps(result_dict, indent=4, ensure_ascii=False), 'utf8'))
+	fcntl.flock(fd, fcntl.LOCK_UN)
+	os.close(fd)
+	signal.alarm(0)
+
+	flash('谢谢参与！')
 	return redirect(url_for('ques.square'))
 
 
@@ -199,10 +205,10 @@ def originate():
 		questionnaire['questions'].append(q_dict.copy())
 
 		slug = questionnaire['slug']
-		file_path = os.path.join(_get_option('DIR'), slug+'.json')
-		if os.path.exists(file_path):
+		q_path = os.path.join(_get_option('DIR'), slug+'.json')
+		if os.path.exists(q_path):
 			slug = questionnaire['slug'] + str(random.randint(100, 999))
-			file_path = os.path.join(_get_option('DIR'), slug +'.json')
+			q_path = os.path.join(_get_option('DIR'), slug+'.json')
 
 		# 创建并存储 qrcode
 		url = _get_option('SITE_BASE') + slug
@@ -216,8 +222,9 @@ def originate():
 		qrcode.png(slug + '.png', scale=4)
 		os.rename(os.getcwd() + '/' + slug + '.png', qrcode_dir + '/' + slug + '.png')
 
-		with open(file_path, 'w', encoding='utf8') as f:
+		with open(q_path, 'w', encoding='utf8') as f:
 			json.dump(questionnaire, f, indent=4, ensure_ascii=False)
+		init_result(slug)
 		flash('成功创建问卷！扫描二维码或分发本页面 URL 即可让用户参与本问卷调查。')
 		return redirect(url_for('ques.questionnaire', slug=slug))
 
@@ -228,6 +235,13 @@ def originate():
 def get_qrcode(filename):
     return send_from_directory(load_config('QUESTIONNAIRE_QRCODE_DIR'), filename, as_attachment=True)
 
+
+def init_result(slug):
+	r_path = os.path.join(_get_option('RESULTS_DIR'), slug+'.json')
+	r_dict = {'total': 0}
+	with open(r_path, 'w', encoding='utf8') as f:
+		json.dump(r_dict, f, indent=4, ensure_ascii=False)
+	return None
 
 
 def _merge_objects(obj1, obj2):
@@ -338,6 +352,9 @@ def _write_submission(data, slug):
 	with open(sfile, 'w', encoding='utf8') as f:
 		json.dump(data, f, indent=4, ensure_ascii=False)
 
+def handler(signum, frame):
+    print('Signal handler called with signal', signum)
+    raise OSError("Couldn't open device!")
 
 # HTTP Basic Auth
 # http://flask.pocoo.org/snippets/8/

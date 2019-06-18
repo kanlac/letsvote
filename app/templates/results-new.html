@@ -4,7 +4,7 @@
 
 {% block page_content %}
 
-{% if results is none %}
+{% if results.total == 0 %}
 <h4>还没有人填写过该问卷喔😯</h4>
 {% else %}
 	<p>答卷份数：{{ results.total }}</p>
