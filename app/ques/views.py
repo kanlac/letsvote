@@ -1,5 +1,5 @@
 import os, json, errno, fcntl, os, signal, time, random, pyqrcode, sys
-from flask import render_template, request, Response, current_app as app, abort, redirect, url_for, flash, send_from_directory
+from flask import render_template, request, Response, current_app as app, abort, redirect, url_for, flash, send_from_directory, make_response
 from collections import defaultdict
 from functools import wraps
 from datetime import datetime
@@ -41,6 +41,10 @@ def questionnaire(slug):
 
 	if request.method == 'GET':
 		return render_template('questionnaire.html', questionnaire=data, slug=slug)
+
+	if request.cookies.get(slug) == 'voted':
+		flash('请勿重复提交喔 😯')
+		return redirect(url_for('ques.square'))
 
 	form = request.form
 	print(f"form: {form}")
@@ -126,8 +130,10 @@ def questionnaire(slug):
 	os.close(fd)
 	signal.alarm(0)
 
+	resp = make_response(redirect(url_for('ques.square')))
+	resp.set_cookie(slug, 'voted')
 	flash('谢谢参与！')
-	return redirect(url_for('ques.square'))
+	return resp
 
 
 @ques.route('/results/<slug>', methods=['GET'])
