@@ -1,52 +1,46 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Results{% endblock %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='css/results.css') }}">
+{% endblock %}
 
-{% block content_class -%}
-	wide
-{%- endblock content_class %}
+{% block title %}LetsVote-统计结果-{{questionnaire.title}}{% endblock %}
 
 {% block page_content %}
-	<h1>Results for <em>{{ questionnaire.title }}</em></h1>
 
-	{% if submissions %}
-	<table class="results">
-
-		<thead>
-		{% for q in questionnaire.questions %}
-			<th>{{ q.label }}</th>
-		{% endfor %}
-		<th>
-			Submission date
-		</th>
-		</thead>
-
-		{% for d, s in submissions.items() | sort %}
-			<tr>
-				{% for q in questionnaire.questions %}
-				<td>
-					{% if loop.index0 in s %}
-						{% set items = s[loop.index0] %}
-						{% for value, other in items %} 
-							{{ value }}
-							{%- if other %}
-								({{ other }})
-							{%- endif -%}
-							{%- if not loop.last -%}
-								,
-							{%- endif -%}
-						{%- endfor %}
-					{% endif %}
-				</td>
+{% if results.total == 0 %}
+<h4>还没有人填写过该问卷喔😯</h4>
+{% else %}
+	<p>答卷份数：{{ results.total }}</p>
+	{% for q in results.questions %}
+		<h3>{{ q.label }}</h3><br>
+		{% if q.result %}
+			{% for opt in q.result %}
+			<p>
+				<b>{{ opt.option }}：</b>
+				<span class="data-text">
+				{{ opt.count }} 人
+				{% if opt.percentage %}
+				| {{ opt.percentage }}%
+				{% endif %}
+				</span>
+			</p>
+			{% endfor %}
+			{% if q.other_options %}
+			<p>
+				{% for t in q.other_options %}
+				{% if loop.index0 %}, {% endif %}
+				{{ t }}
 				{% endfor %}
-				<td>{{ d.strftime('%c') }}</td>
-			</tr>
-		{% endfor %}
-
-	{% else %}
-		The questionnaire doesn't have any submission yet.
-
-	</table>
-	{% endif %}
-	
-{% endblock page_content %}
+			</p>
+			{% endif %}
+		{% else %}
+			{% for text in q.texts %}
+			<p>{{ text }}</p>
+			{% endfor %}
+		{% endif %}
+		<hr>
+	{% endfor %}
+{% endif %}
+{% endblock %}

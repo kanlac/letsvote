@@ -144,7 +144,7 @@ def results(slug):
 		flash("You aren't the owner of this questionnaire.")
 		return redirect(url_for('ques.square'))
 
-	return render_template("results-new.html", questionnaire=form, results=_get_results(slug))
+	return render_template("results.html", questionnaire=form, results=_get_results(slug))
 
 
 @ques.route('/originate', methods=['GET', 'POST'])

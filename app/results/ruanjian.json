@@ -1,3 +1,74 @@
 {
-	"total": 0
+    "total": 5,
+    "questions": [
+        {
+            "label": "我___参与《软件过程管理》课程教学。",
+            "type": "radio",
+            "result": [
+                {
+                    "option": "非常喜欢",
+                    "count": 1,
+                    "percentage": "20.00"
+                },
+                {
+                    "option": "喜欢",
+                    "count": 5,
+                    "percentage": "100.00"
+                },
+                {
+                    "option": "不喜欢",
+                    "count": 3,
+                    "percentage": "60.00"
+                },
+                {
+                    "option": "很不喜欢",
+                    "count": 0,
+                    "percentage": "0.00"
+                },
+                {
+                    "option": "说不出喜不喜欢",
+                    "count": 0,
+                    "percentage": "0.00"
+                }
+            ]
+        },
+        {
+            "label": "《软件过程管理》课程与所学过课程关系___。",
+            "type": "radio",
+            "result": [
+                {
+                    "option": "联系非常紧密",
+                    "count": 3,
+                    "percentage": "60.00"
+                },
+                {
+                    "option": "联系比较紧密",
+                    "count": 1,
+                    "percentage": "20.00"
+                },
+                {
+                    "option": "不清楚",
+                    "count": 1,
+                    "percentage": "20.00"
+                },
+                {
+                    "option": "联系一般",
+                    "count": 0,
+                    "percentage": "0.00"
+                },
+                {
+                    "option": "完全无关",
+                    "count": 0,
+                    "percentage": "0.00"
+                }
+            ]
+        },
+        {
+            "label": "您对《软件过程管理》这门课程有什么意见和建议？",
+            "type": "text",
+            "texts": [
+                ""
+            ]
+        }
+    ]
 }
