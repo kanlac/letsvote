@@ -10,8 +10,9 @@ from pathlib import Path
 from . import ques
 
 
-@ques.route('/', methods=['GET'])
+@ques.route('/', methods=['GET', 'POST'])
 def square():
+	print(f"request {request.cookies.get('index')}")
 	dir_ = _get_option('DIR')
 	qs = map(lambda s: (s[:-5], _get_questionnaire_data(s[:-5])),
 			 filter(lambda s: not s.startswith('_') and s.endswith('.json'),
@@ -66,7 +67,6 @@ def questionnaire(slug):
 		for question in data.get('questions', []): # 对问卷表里的每个问题，全部存到 q_list 然后赋给 result_dict['questions']
 			q = dict()
 			q['label'] = question['label']
-			print(f"q['label']: {q['label']}")
 			q['type'] = question['type']
 
 			if q['type'] == 'text': # 文本题
@@ -96,7 +96,6 @@ def questionnaire(slug):
 		result_dict['questions'] = q_list
 	else:
 		result_dict['total'] = result_dict['total']+1
-		print(f"result_dict: {result_dict}")
 		# 加入文本，选择项的 count++，所有项的 percentage 清空
 		for q in result_dict['questions']:
 			if 'texts' in q: # 文本题
@@ -104,7 +103,6 @@ def questionnaire(slug):
 					q['texts'].append(form[q['label']])
 			elif 'result' in q: # 选择题
 				for r in q['result']:
-					print(f"r option: {r['option']}, q label: {q['label']}")
 					if r['option'] in form[q['label']]:
 						r['count'] = r['count']+1
 					if 'percentage' in r:
@@ -120,12 +118,10 @@ def questionnaire(slug):
 				for r in q['result']:
 					r['percentage'] = format(int(r['count']) / int(result_dict['total']) * 100, '0.2f')
 
-	# 关闭字节流，删除旧的文件并创建新的文件
-	os.close(fd)
-	os.remove(result_file_path)
-	open(result_file_path, 'w', encoding='utf8')
-	fd = os.open(result_file_path, os.O_RDWR)
+	os.lseek(fd, 0, os.SEEK_SET) # 指针位置指向开头
 	os.write(fd, bytes(json.dumps(result_dict, indent=4, ensure_ascii=False), 'utf8'))
+	cur_pos = os.lseek(fd, 0, os.SEEK_CUR)
+	os.truncate(fd, cur_pos)
 	fcntl.flock(fd, fcntl.LOCK_UN)
 	os.close(fd)
 	signal.alarm(0)

@@ -8,7 +8,9 @@
 {% block title %}LetsVote-统计结果-{{questionnaire.title}}{% endblock %}
 
 {% block page_content %}
-
+{% if not results %}
+<h4>File load error.</h4>
+{% endif %}
 {% if results.total == 0 %}
 <h4>还没有人填写过该问卷喔😯</h4>
 {% else %}
