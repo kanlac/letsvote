@@ -11,6 +11,8 @@
 <h1>创建新问卷</h1><br>
 
 <form method="post" id="form">
+	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+	
 	<input placeholder="请输入问卷标题…" name="title" type="text" class="questionnaire-title required"><br><br><br>
 	<input placeholder= "slug（请仅包含小写英文字母、数字和短横）" type="text" name="slug" class="questionnaire-slug required" pattern="[a-z\d-]*"><br><br>
 	<textarea class="questionnaire-comment" placeholder="介绍（选填）" name="comment"></textarea>

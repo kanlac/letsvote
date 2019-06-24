@@ -12,7 +12,6 @@ from . import ques
 
 @ques.route('/', methods=['GET', 'POST'])
 def square():
-	print(f"request {request.cookies.get('index')}")
 	dir_ = _get_option('DIR')
 	qs = map(lambda s: (s[:-5], _get_questionnaire_data(s[:-5])),
 			 filter(lambda s: not s.startswith('_') and s.endswith('.json'),

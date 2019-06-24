@@ -1,4 +1,6 @@
 <form action="{{ url_for('ques.questionnaire', slug=slug) }}" method="POST" id="form">
+	<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+	
 	{% for q in questionnaire.questions %}
 
 	<h5>{{ q.label }}{% if q.required %}*{% endif %}</h5>
