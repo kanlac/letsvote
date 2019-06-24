@@ -143,6 +143,24 @@ def results(slug):
 	return render_template("results.html", questionnaire=form, results=_get_results(slug))
 
 
+@ques.route('/<slug>.json', methods=['GET'])
+def questionnaire_json(slug):
+	parsed = json.dumps(_get_questionnaire_data(slug), indent=4, ensure_ascii=False)
+	return render_template('rendered_json.html', text=parsed)
+
+
+@ques.route('/results/<slug>.json', methods=['GET'])
+@login_required
+def results_json(slug):
+	form = _get_questionnaire_data(slug)
+	if current_user.username != form.get('creator'):
+		flash("You aren't the owner of this questionnaire.")
+		return redirect(url_for('ques.square'))
+
+	parsed = json.dumps(_get_results(slug), indent=4, ensure_ascii=False)
+	return render_template('rendered_json.html', text=parsed)
+
+
 @ques.route('/originate', methods=['GET', 'POST'])
 @login_required
 def originate():
