@@ -28,8 +28,10 @@ def delete(slug):
 	else:
 		q_file = os.path.join(_get_option('DIR'), slug + '.json')
 		qrcode_file = os.path.join(_get_option('QRCODE_DIR'), slug + '.png')
+		r_file = os.path.join(_get_option('RESULTS_DIR'), slug + '.json')
 		os.remove(q_file)
 		os.remove(qrcode_file)
+		os.remove(r_file)
 		flash('成功删除问卷。')
 
 	return redirect(url_for('ques.square'))

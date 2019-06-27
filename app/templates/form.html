@@ -3,7 +3,7 @@
 	
 	{% for q in questionnaire.questions %}
 
-	<h5>{{ q.label }}{% if q.required %}*{% endif %}</h5>
+	<h5>{{ q.label }}{% if q.required %}<span style="color: red;">*</span>{% endif %}</h5>
 	<p>{{ q.desc }}</p>
 
 	{% if q.type == "text" %}
